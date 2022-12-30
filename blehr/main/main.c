@@ -63,28 +63,17 @@ static void blerssi_advertise(void)
      */
     fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; // basic rate (bt 1.x), enhanced data rate (bt 2.1) DISABLED
 
-    // Indicate that the TX power level field should be included; have the
-    // stack fill this value automatically.  This is done by assigning the
-    // special value BLE_HS_ADV_TX_PWR_LVL_AUTO.
-
-    // SIGNAL STRENGTH. BLE scanner app takes this to estimate distance.
-    fields.tx_pwr_lvl_is_present = 1;
-    fields.tx_pwr_lvl = BLE_HS_ADV_TX_PWR_LVL_AUTO;
-
-    // add (limited) fields to advertisements to directly advertise data
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);
     fields.name_is_complete = 1;
 
-    // GAP
-    rc = ble_gap_adv_set_fields(&fields); // rc =
+    rc = ble_gap_adv_set_fields(&fields);
     if (rc != 0)
     {
         MODLOG_DFLT(ERROR, "error setting advertisement data; rc=%d\n", rc);
         return;
     }
 
-    // Begin advertising
     memset(&adv_params, 0, sizeof(adv_params));   // sets all bits of adv_params to zero
     adv_params.conn_mode = BLE_GAP_CONN_MODE_NON; // set to NON instead of UND
     adv_params.disc_mode = BLE_GAP_DISC_MODE_NON;
