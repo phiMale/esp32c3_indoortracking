@@ -6,6 +6,7 @@
 * Be sure you have **Python** and **pip** on your computer
 * Create a new **PIO** project with the **ESP32-C3** and **IDF** as framework
 * Wait as loading may take some time
+* Change `platform` in `platformio.ini` to `platform = espressif32@4.4.0` as the latest version is not compatible yet (this information took 8 unpaid hours to find, thank you very much)
 
 **Prepare your configurations.** To edit the IDF build configurations within PIO or even within a standard terminal, you will need the PIO CLI:
 * Get the PIO **CLI** by opening a new terminal and typing `$ pip install -U platformio`
