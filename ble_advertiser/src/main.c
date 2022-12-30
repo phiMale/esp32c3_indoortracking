@@ -16,7 +16,7 @@
 
 static const char *tag = "NimBLE_BLE_RSSI";
 
-static const char *device_name = "indoortracking_ESP1";
+static const char *device_name = "indoortracking_ESP1_adv";
 
 static uint8_t blerssi_addr_type;
 
