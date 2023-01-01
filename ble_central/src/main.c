@@ -13,7 +13,11 @@
 #include "blecent.h"
 #include "freertos/task.h"
 
+
 // #include "esp_gap_ble_api.h"
+
+// from sdkconfig file: 
+#define ESP1_PEER_ADDR "84:F7:03:09:0B:DA"
 
 static const char *tag = "NimBLE_BLE_CENT";
 static int blecent_gap_event(struct ble_gap_event *event, void *arg);
@@ -274,10 +278,10 @@ blecent_should_connect(const struct ble_gap_disc_desc *disc)
         return rc;
     }
 
-    if (strlen(CONFIG_EXAMPLE_PEER_ADDR) && (strncmp(CONFIG_EXAMPLE_PEER_ADDR, "ADDR_ANY", strlen("ADDR_ANY")) != 0)) {
-        ESP_LOGI(tag, "Peer address from menuconfig: %s", CONFIG_EXAMPLE_PEER_ADDR);
+    if (strlen(ESP1_PEER_ADDR) && (strncmp(ESP1_PEER_ADDR, "ADDR_ANY", strlen("ADDR_ANY")) != 0)) {
+        ESP_LOGI(tag, "Peer address from menuconfig: %s", ESP1_PEER_ADDR);
         /* Convert string to address */
-        sscanf(CONFIG_EXAMPLE_PEER_ADDR, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
+        sscanf(ESP1_PEER_ADDR, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
                &peer_addr[5], &peer_addr[4], &peer_addr[3],
                &peer_addr[2], &peer_addr[1], &peer_addr[0]);
         if (memcmp(peer_addr, disc->addr.val, sizeof(disc->addr.val)) != 0) {
