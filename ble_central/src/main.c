@@ -13,7 +13,7 @@
 #include "blecent.h"
 #include "freertos/task.h"
 
-#include "esp_gap_ble_api.h"
+// #include "esp_gap_ble_api.h"
 
 static const char *tag = "NimBLE_BLE_CENT";
 static int blecent_gap_event(struct ble_gap_event *event, void *arg);
