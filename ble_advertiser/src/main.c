@@ -14,6 +14,9 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "blerssi_sens.h"
 
+#define ADV_TIME_ITVL (uint16_t) 2000
+
+
 static const char *tag = "NimBLE_BLE_RSSI";
 
 static const char *device_name = "indoortracking_ESPC";
@@ -61,11 +64,18 @@ static void blerssi_advertise(void)
      *      o Discoverability in forthcoming advertisement (general)
      *      o BLE-only (BR/EDR unsupported)
      */
+    
     fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; // basic rate (bt 1.x), enhanced data rate (bt 2.1) DISABLED
 
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);
     fields.name_is_complete = 1;
+    // fields.adv_itvl_is_present = 1;
+    // fields.adv_itvl = ADV_TIME_ITVL;
+    fields.tx_pwr_lvl_is_present = 1;
+    fields.tx_pwr_lvl = 69;
+    fields.svc_data_uuid16_len = 4;
+    fields.svc_data_uuid16 = 
 
     rc = ble_gap_adv_set_fields(&fields);
     if (rc != 0)
@@ -77,6 +87,9 @@ static void blerssi_advertise(void)
     memset(&adv_params, 0, sizeof(adv_params));   // sets all bits of adv_params to zero
     adv_params.conn_mode = BLE_GAP_CONN_MODE_NON; // set to NON instead of UND
     adv_params.disc_mode = BLE_GAP_DISC_MODE_NON;
+
+    adv_params.itvl_max = 0;
+    adv_params.itvl_min = 0;
     rc = ble_gap_adv_start(blerssi_addr_type, NULL, BLE_HS_FOREVER,
                            &adv_params, blerssi_advertise, NULL);
     if (rc != 0)

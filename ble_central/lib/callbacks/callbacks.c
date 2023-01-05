@@ -33,13 +33,11 @@ static void blecent_scan(void)
     }
 }
 
-static int blecent_gap_event(struct ble_gap_event *event, void *arg)
-{
+static int blecent_gap_event(struct ble_gap_event *event, void *arg){
     struct ble_hs_adv_fields fields;
     int rc;
 
-    rc = ble_hs_adv_parse_fields(&fields, event->disc.data,
-                                 event->disc.length_data);
+    rc = ble_hs_adv_parse_fields(&fields, event->disc.data, event->disc.length_data);
     if (rc != 0)
     {
         return 0;
@@ -49,7 +47,6 @@ static int blecent_gap_event(struct ble_gap_event *event, void *arg)
     if (fields.tx_pwr_lvl == 69)
     {
         MODLOG_DFLT(INFO, "[DEBUG]: Trying to print advertisements:\n");
-        print_adv_fields(&fields);
         MODLOG_DFLT(INFO, "[DEBUG]: Name: %s | RSSI %d\n", fields.name, event->disc.rssi);
     }
     return 0;
