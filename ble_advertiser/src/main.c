@@ -14,25 +14,22 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "blerssi_sens.h"
 
-#define ADV_TIME_ITVL (uint16_t) 2000
+//#define ADV_TIME_ITVL (uint16_t) 2000
 
 
 static const char *tag = "NimBLE_BLE_RSSI";
 
-static const char *device_name = "indoortracking_ESPC";
-
+static const char *device_name = "IT_ESP_4";
+static const uint16_t adv_time_itvl = 2000;
 static uint8_t blerssi_addr_type;
 
-void print_bytes(const uint8_t *bytes, int len)
-{
-    for (int i = 0; i < len; i++)
-    {
+void print_bytes(const uint8_t *bytes, int len){
+    for (int i = 0; i < len; i++){
         MODLOG_DFLT(INFO, "%s0x%02x", i != 0 ? ":" : "", bytes[i]);
     }
 }
 
-void print_addr(const void *addr)
-{
+void print_addr(const void *addr){
     const uint8_t *u8p = addr;
     MODLOG_DFLT(INFO, "%02x:%02x:%02x:%02x:%02x:%02x",
                 u8p[5], u8p[4], u8p[3], u8p[2], u8p[1], u8p[0]);
@@ -65,17 +62,17 @@ static void blerssi_advertise(void)
      *      o BLE-only (BR/EDR unsupported)
      */
     
-    fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP; // basic rate (bt 1.x), enhanced data rate (bt 2.1) DISABLED
+    fields.flags = BLE_HS_ADV_F_DISC_GEN * BLE_HS_ADV_F_BREDR_UNSUP; // basic rate (bt 1.x), enhanced data rate (bt 2.1) DISABLED
 
     fields.name = (uint8_t *)device_name;
     fields.name_len = strlen(device_name);
     fields.name_is_complete = 1;
-    // fields.adv_itvl_is_present = 1;
-    // fields.adv_itvl = ADV_TIME_ITVL;
+    fields.adv_itvl_is_present = 1;
     fields.tx_pwr_lvl_is_present = 1;
     fields.tx_pwr_lvl = 69;
-    fields.svc_data_uuid16_len = 4;
-    fields.svc_data_uuid16 = 
+    fields.adv_itvl = adv_time_itvl;
+    // fields.svc_data_uuid16_len = 4;
+    // fields.svc_data_uuid16 = 
 
     rc = ble_gap_adv_set_fields(&fields);
     if (rc != 0)
@@ -88,6 +85,7 @@ static void blerssi_advertise(void)
     adv_params.conn_mode = BLE_GAP_CONN_MODE_NON; // set to NON instead of UND
     adv_params.disc_mode = BLE_GAP_DISC_MODE_NON;
 
+    
     adv_params.itvl_max = 0;
     adv_params.itvl_min = 0;
     rc = ble_gap_adv_start(blerssi_addr_type, NULL, BLE_HS_FOREVER,
@@ -139,7 +137,7 @@ void app_main(void)
 
     print_bytes(m, 21);
 
-    /* Initialize NVS — it is used to store PHY calibration data */
+    /* Initialize NVS — used to store PHY calibration data */
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
