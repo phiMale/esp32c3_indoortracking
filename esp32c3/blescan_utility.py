@@ -58,8 +58,8 @@ def xstr2ints(xstring, n=3):
 
 scanner = Scanner().withDelegate(ScanDelegate())
 #scanner.start()
-scanner.start(passive=False)
-scanner.process()
+# scanner.start(passive=False)
+# scanner.process()
 
 def get_rssi_vals():
     while True: 
@@ -71,22 +71,27 @@ def get_rssi_vals():
         for dev in devices:
             for (type, desc, value) in dev.getScanData():
                 #print(value)
+                global espfound
                 if espfound == False:
                     if desc == "Complete Local Name":
                         #print(value)
                         espnum = which_esp(value)
                         if espnum != None:
                             espfound = True
+                            #rpi_rssi = []
                         
                         
 
                 else:
-                    if desc == "Manufacturer": # "16b Service Data" "0x12"
-                        print("{} --> {}".format(espnum, xstr2ints(value)))
+                    if desc == "16b Service Data": # "16b Service Data" "0x12"
+                        #print("{} --> {}".format(espnum, xstr2ints(value)))
                         espdata[espnum] = xstr2ints(value)
                         espfound = False
                         return espdata
-                    
+
+for i in range(100):
+    print(get_rssi_vals())
+    sleep(5)
 
                                 
 

@@ -44,8 +44,8 @@ class c_window(tk.Tk):
         subfig = fig.add_subplot(111)
         subfig.plot([1])        
         canvas = FigureCanvasTkAgg(fig, self)
-        canvas.show()
-        canvas.get_tk_widget().pack(side = BOTTOM, fill = BOTH, expand = True)
+        canvas.draw()
+        #canvas.get_tk_widget().pack(side = BOTTOM, fill = BOTH, expand = True)
 
 def animate(i):
     data = pd.read_csv('positiondata.csv')
