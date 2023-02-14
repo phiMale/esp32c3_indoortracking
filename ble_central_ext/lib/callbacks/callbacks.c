@@ -7,7 +7,14 @@
 static void blecent_scan(void)
 {
     uint8_t own_addr_type;
-    struct ble_gap_disc_params disc_params;
+    
+    // int ble_gap_ext_disc(uint8_t own_addr_type, uint16_t duration, uint16_t period,
+    //                  uint8_t filter_duplicates, uint8_t filter_policy,
+    //                  uint8_t limited,
+    //                  const struct ble_gap_ext_disc_params *uncoded_params,
+    //                  const struct ble_gap_ext_disc_params *coded_params,
+    //                  ble_gap_event_fn *cb, void *cb_arg);
+
     int rc;
 
     rc = ble_hs_id_infer_auto(0, &own_addr_type);
@@ -17,15 +24,21 @@ static void blecent_scan(void)
         return;
     }
 
-    disc_params.filter_duplicates = 1;
-    disc_params.passive = 0;  // how about setting this to 0?
-    disc_params.itvl = 1000;
-    disc_params.window = 1000;
-    disc_params.filter_policy = 0;
-    disc_params.limited = 0;
 
-    rc = ble_gap_disc(own_addr_type, BLE_HS_FOREVER, &disc_params,
-                      blecent_gap_event, NULL);
+    uint16_t duration = 0;
+    uint16_t period = 1;
+    uint8_t filter_duplicates = 0;
+    uint8_t filter_policy = 0;
+    uint8_t limited = 0;
+    const struct ble_gap_ext_disc_params *uncoded_params = 0;
+    const struct ble_gap_ext_disc_params *coded_params = 0;
+    ble_gap_event_fn *cb = &blecent_gap_event;
+    void *cb_arg;
+
+    rc = ble_gap_ext_disc(own_addr_type, duration, period,
+                     filter_duplicates, filter_policy,
+                     limited, uncoded_params, coded_params,
+                     cb, cb_arg);
     if (rc != 0)
     {
         MODLOG_DFLT(ERROR, "Error initiating GAP discovery procedure; rc=%d\n",
