@@ -1,4 +1,4 @@
-.myvenv
-pyside-setup
-tinyb
-.vscode
+raspberry/.myvenv
+raspberry/.vscode
+raspberry/obsolete
+raspberry/__pycache__
