@@ -1,6 +1,0 @@
-pyqtgraph
-PyQt5
-qtwidgets
-bluepy
-matplotlib
-numpy
